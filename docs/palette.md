@@ -53,6 +53,37 @@ in the half-open interval `(minY, maxY]`: the topmost row is exactly `maxY`, whi
 while that same value is the `minY` of the display stacked above. `contains` would therefore hand a
 pointer parked at the top of one display to its neighbour. `NSMouseInRect` exists for precisely this.
 
+## Emacs key bindings
+
+macOS already ships the Emacs chords. AppKit's `StandardKeyBinding.dict` maps `⌃A ⌃E ⌃F ⌃B ⌃N ⌃P
+⌃D ⌃H ⌃K ⌃Y ⌃T ⌃O ⌃V` to `NSStandardKeyBindingResponding` selectors, the user may override any of
+them in `~/Library/KeyBindings/DefaultKeyBinding.dict`, and the field editor behind the SwiftUI
+`TextField` resolves the whole table for free. **Most of this feature is therefore nothing** — text
+editing in the search field already works and must be left alone.
+
+The one gap is movement. In a single-line field `moveUp:` / `moveDown:` are dead ends, and the
+palette wants them to drive the list, not the caret. `KeyBindingResolver` closes it by reading the
+binding rather than the key code:
+
+- A detached `NSTextView` probe runs `interpretKeyEvents` and records the selector the system tables
+  resolve the event into. Detached is deliberate — resolution needs no window and no first responder.
+  An unbound chord comes back as `noop:`, which is what distinguishes "not bound" from "bound to
+  something the palette doesn't own".
+- `PalettePanel.sendEvent` rewrites the four movement selectors into their plain arrow key **before
+  anything else inspects the event**, stripping the ⌃ (a surviving one turns `→` into
+  `moveToRightEndOfLine:`).
+
+So ⌃N *is* ↓ — one handler, not two. Compact-bar expansion, menu navigation and the emoji grid all
+come along, and anything added to `.onKeyPress(.downArrow)` later is inherited automatically.
+
+Two rules keep this from spreading. **Only the four movement selectors are ever taken over**; every
+other standard binding belongs to the field editor, and adding a fifth means breaking working text
+editing. And **nothing here matches a key code** — the ⌃ gate exists only so ordinary typing never
+reaches the probe and a bare arrow is never handled twice. That is what makes a user's own
+`DefaultKeyBinding.dict` work: rebind `⌃J` to `moveDown:` and the palette follows.
+`Tools/keybinding-test.swift` asserts both, and reports a local rebinding as a skip rather than a
+failure.
+
 ## The placeholder is Tinycast's, not the field's
 
 The search field is a SwiftUI `TextField` with **no `prompt`**; `RootPaletteView` draws the

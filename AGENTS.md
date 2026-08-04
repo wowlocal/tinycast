@@ -66,6 +66,16 @@ Never break these without an explicit task to do so.
   `AppIndex.publishEntries()`, and the matching filter in `LauncherList.rows`, in that same order.
 - **While a footer menu is open the palette search field never resigns first responder** — input is
   frozen instead (resigning shifts the text a point or two). See [palette.md](docs/palette.md).
+- **Emacs chords are read from the system tables, never matched by key code.** macOS already maps
+  `⌃A ⌃E ⌃F ⌃B ⌃N ⌃P ⌃D ⌃H ⌃K ⌃Y ⌃T` in AppKit's `StandardKeyBinding.dict` (user-overridable via
+  `~/Library/KeyBindings/DefaultKeyBinding.dict`), and the field editor behind the search field
+  already honors all of it — so text editing needs no code and must be left alone.
+  `KeyBindingResolver` closes the one gap: it resolves an event to its selector through a detached
+  `NSTextView` probe, and `PalettePanel.sendEvent` rewrites **only** `moveUp:` / `moveDown:` /
+  `moveForward:` / `moveBackward:` into the equivalent arrow key before anything else sees the event.
+  ⌃N *is* ↓ — one handler, so compact expansion, menu nav and the emoji grid come free. A fifth
+  selector means breaking working text editing; a key-code match means breaking the user's own
+  rebindings. See [palette.md](docs/palette.md).
 - **Focus restoration is load-bearing.** Paste targets the recorded `previousApp` and requires the
   Accessibility permission (`Permissions.ensureAccessibility()`). See [palette.md](docs/palette.md).
 - **`Core/Calculator/` (incl. `CalcDateTime`) must stay Foundation-only *and pure*** — no AppKit /

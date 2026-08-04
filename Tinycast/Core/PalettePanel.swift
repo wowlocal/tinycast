@@ -21,6 +21,19 @@ final class PalettePanel: NSPanel {
         kVK_Return, kVK_ANSI_KeypadEnter, kVK_Escape, kVK_Tab
     ]
 
+    private let keyBindings = KeyBindingResolver()
+
+    /// Rewrites an Emacs-style movement chord into the plain arrow key it means, so ⌃N/⌃P walk the palette's one arrow path — compact expansion, menu navigation, emoji grid — instead of a second copy of it. The ⌃ is stripped from the substitute: a surviving one would turn `→` into `moveToRightEndOfLine:`.
+    private func movementSubstitute(for event: NSEvent) -> NSEvent? {
+        guard let arrow = keyBindings.movementArrow(for: event) else { return nil }
+        return NSEvent.keyEvent(
+            with: .keyDown, location: event.locationInWindow,
+            modifierFlags: event.modifierFlags.subtracting(.control), timestamp: event.timestamp,
+            windowNumber: windowNumber, context: nil, characters: arrow.character,
+            charactersIgnoringModifiers: arrow.character, isARepeat: event.isARepeat,
+            keyCode: UInt16(arrow.code))
+    }
+
     /// Hide/show the caret on SwiftUI's *own* live field editor (the current first responder) without replacing it — SwiftUI force-casts the field editor to a private subclass, so vending our own crashes; we can only tune the existing one. The field never resigns first responder, so its text/placeholder never reflows.
     private func setSearchCaretHidden(_ hidden: Bool) {
         guard let editor = firstResponder as? NSTextView else { return }
@@ -35,6 +48,8 @@ final class PalettePanel: NSPanel {
         case .keyDown: paletteViewModel?.hoverHighlightArmed = false
         default: break
         }
+        // Substituted first, before anything below inspects the event, so an Emacs chord is subject to the same menu-freeze and shortcut rules as the arrow key it stands for.
+        let event = movementSubstitute(for: event) ?? event
         // A footer menu owns the keyboard: the search field stays first responder (no focus swap, so nothing reflows) with only its caret hidden; swallow text-editing keystrokes before the field editor consumes them, but let shortcut chords (⌘K, ⌘⌫) and menu-nav keys reach SwiftUI's onKeyPress.
         if event.type == .keyDown,
             paletteViewModel?.menuOpen == true,

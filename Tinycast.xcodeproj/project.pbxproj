@@ -30,6 +30,7 @@
 		22488569DA337BCE033552F1 /* CursorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8214A6789CF8E3B5E16BB4C2 /* CursorScreen.swift */; };
 		22622CB1D2F679687D5C2B03 /* SearchRelevance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E9B0F16CFCA5E4091178AF /* SearchRelevance.swift */; };
 		24842144273FF92228540DBE /* FrequentEmojiStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A228BEF62103605DE7A8F38 /* FrequentEmojiStore.swift */; };
+		2675ACABEA9BC89682228D09 /* KeyBindingResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215346EAE4A03845CD7AA1FF /* KeyBindingResolver.swift */; };
 		291F17D35D98BB5700640AA7 /* QuicklinkListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30F22CD63D23FC1808878DD /* QuicklinkListView.swift */; };
 		2D620B55ED68ECDF75E7155E /* UninstallRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE113DF7C07BC74AD73BC4C /* UninstallRunner.swift */; };
 		32697AB3853D043A12888B96 /* Permissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31E3ACB6D2C26ECA485C3DB /* Permissions.swift */; };
@@ -179,6 +180,7 @@
 		1BCCED95A78DC5BED117E960 /* RaycastImportSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaycastImportSelection.swift; sourceTree = "<group>"; };
 		1C6D4DFAC1D761ECC2DE1112 /* QuicklinksSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuicklinksSettingsView.swift; sourceTree = "<group>"; };
 		1DB0D6E17E2B2D6F2CB47E0D /* HotKeyCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotKeyCenter.swift; sourceTree = "<group>"; };
+		215346EAE4A03845CD7AA1FF /* KeyBindingResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBindingResolver.swift; sourceTree = "<group>"; };
 		23591B301A183579098AA019 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		24F31E587DD4EAA1D7BD39AF /* UninstallProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UninstallProtection.swift; sourceTree = "<group>"; };
 		25B8A7D8DBB0CE2ACEDB3979 /* CalcUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcUnits.swift; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 				9FB750D045194AE34D39D792 /* FavoritesStore.swift */,
 				D37B6D29E8E23C6136EBFB38 /* HotKeyManager.swift */,
 				99945F0952ADADBBEB9B8388 /* ImageThumbnail.swift */,
+				215346EAE4A03845CD7AA1FF /* KeyBindingResolver.swift */,
 				0D045D032498C2294A99890E /* LaunchAtLogin.swift */,
 				87B6E442944C99B4D1FE1C74 /* LauncherRankingStore.swift */,
 				7FC5F0D4ECE8F3888DEB7642 /* NotificationToken.swift */,
@@ -842,6 +845,7 @@
 				14712478C37E6E8760CA47EC /* HyperKey.swift in Sources */,
 				F6B79728FF2D37A60FED72AF /* HyperKeyTap.swift in Sources */,
 				E5072CA7D34BA877D97DF392 /* ImageThumbnail.swift in Sources */,
+				2675ACABEA9BC89682228D09 /* KeyBindingResolver.swift in Sources */,
 				F5F3381FF70997223F8888B0 /* KeyShortcut.swift in Sources */,
 				A0DB31CA35D9A980CA984EDE /* LaunchAtLogin.swift in Sources */,
 				FBA8548636E1F1EABCC3A8CA /* LauncherItemsCard.swift in Sources */,

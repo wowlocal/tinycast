@@ -102,6 +102,8 @@ swiftc -swift-version 6 Tinycast/Core/NotificationToken.swift \
 swiftc -swift-version 6 Tinycast/Core/HotKey/DoubleTapModifier.swift \
     Tinycast/Core/HotKey/DoubleTapDetector.swift Tools/hotkey-test.swift \
     -o /tmp/hotkey-test && /tmp/hotkey-test                        # double-tap modifier recognizer
+swiftc -swift-version 6 Tinycast/Core/KeyBindingResolver.swift Tools/keybinding-test.swift \
+    -o /tmp/keybinding-test && /tmp/keybinding-test                # emacs chord → arrow substitution
 swiftc -swift-version 6 Tinycast/Core/Theme.swift \
     Tinycast/Core/CalloutPlacement.swift Tools/callout-test.swift \
     -o /tmp/callout-test && /tmp/callout-test                      # shortcut-recorder callout placement
@@ -161,6 +163,14 @@ directory and every path rule is asked against an injected home, so a run can ne
 library. One case deliberately corrupts a database file and asserts the store reports itself
 unavailable **and leaves the file byte-for-byte intact** — quicklinks are authored data, so unlike
 `ClipboardStore` this one never deletes and recreates.
+
+The key-binding harness is the one exception to "harnesses are headless and pure": `KeyBindingResolver`
+exists precisely to read a real environment — AppKit's `StandardKeyBinding.dict` plus the user's own
+`~/Library/KeyBindings/DefaultKeyBinding.dict` — so it needs AppKit and a GUI session. That makes the
+system-default expectations machine-dependent, so a chord rebound locally is reported as a **skip**,
+never a failure; the structural invariants (only the four movement selectors are taken over, ⌃-gated,
+keyDown only, probe stateless across lookups) are asserted unconditionally. See
+[palette.md](palette.md).
 
 The window-command harness compiles the real catalog, geometry and action memory (Foundation +
 CoreGraphics — `CGRect`'s `Equatable` conformance lives in the CoreGraphics overlay, not Foundation).
